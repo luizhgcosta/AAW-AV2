@@ -2,37 +2,51 @@ const express = require('express')
 
 const router = express.Router()
 
-const Aluno = require('../models/aluno')
+const Post = require('../models/post')
 
-// GET all
-router.get('/', async (req, res) => {
-    try {
-        const alunos = await Aluno.find()
+// GET by UUID
+router.get('/:userId', getPost, async (req, res) => {
 
-        return res.send(alunos)
-    }catch (err) {
-        res.status(500).json({message: err.message})
-    }
+    res.json(res.post)
 })
 
 // GET by ID
-router.get('/:id', getAluno, async (req, res) => {
+router.get('/:id', getPost, async (req, res) => {
 
-    res.json(res.aluno)
+    res.json(res.post)
 })
 
 // POST create
 router.post('/', async (req, res) => {
 
-    const subscriber = new Aluno({
-        matricula: req.body.matricula,
-        anoSemestreDeEntrada: req.body.anoSemestreDeEntrada,
-        nomeCompleto: req.body.nomeCompleto,
-        Curso: req.body.Curso
+    const post = new Post({
+        userId: req.body.userId,
+        conteudo: req.body.conteudo,
+        foto: req.body.foto,
+        status: req.body.status
     })
 
     try {
-        const created = await aluno.save()
+        const created = await post.save()
+
+        res.status(201).json(created)
+    }catch (err) {
+        res.status(400).json({message: err.message})
+    }
+})
+
+// POST by ID
+router.post('/:id', async (req, res) => {
+
+    const post = new Post({
+        userId: req.body.userId,
+        conteudo: req.body.conteudo,
+        foto: req.body.foto,
+        status: req.body.status
+    })
+
+    try {
+        const created = await post.save()
 
         res.status(201).json(created)
     }catch (err) {
@@ -41,25 +55,25 @@ router.post('/', async (req, res) => {
 })
 
 // PATCH update
-router.patch('/:id', getAluno, async (req, res) => {
-    if (req.body.matricula != null) {
-        res.aluno.matricula = req.body.matricula
+router.patch('/:id', getPost, async (req, res) => {
+    if (req.body.userId != null) {
+        res.post.userId = req.body.userId
     }
     
-    if (req.body.anoSemestreDeEntrada != null) {
-        res.aluno.anoSemestreDeEntrada = req.body.anoSemestreDeEntrada
+    if (req.body.conteudo != null) {
+        res.post.conteudo = req.body.conteudo
     }
     
-    if (req.body.nomeCompleto != null) {
-        res.aluno.nomeCompleto = req.body.nomeCompleto
+    if (req.body.foto != null) {
+        res.post.foto = req.body.foto
     }
     
-    if (req.body.Curso != null) {
-        res.aluno.Curso = req.body.Curso
+    if (req.body.status != null) {
+        res.post.status = req.body.status
     }
 
     try {
-        const updated = await res.aluno.save()
+        const updated = await res.post.save()
 
         res.json(updated)
     }catch (err) {
@@ -68,10 +82,10 @@ router.patch('/:id', getAluno, async (req, res) => {
 })
 
 // DELETE remove
-router.delete('/:id', getAluno, async (req, res) => {
+router.delete('/:id', getPost, async (req, res) => {
 
     try {
-        await res.aluno.remove()
+        await res.post.remove()
 
         res.json({message: 'Deleted Successfully'})
     } catch (err) {
@@ -80,18 +94,18 @@ router.delete('/:id', getAluno, async (req, res) => {
 })
 
 // middleware
-async function getAluno(req, res, next) {
+async function getPost(req, res, next) {
     try {
-        aluno = await Aluno.findById(req.params.id)
+        post = await Post.findById(req.params.id)
 
-        if (aluno == null) {
-            return res.status(404).json({message: 'Aluno not found'})
+        if (post == null) {
+            return res.status(404).json({message: 'Post not found'})
         }
     }catch (err) {
         res.status(500).json({message: err.message})
     }
 
-    res.aluno = aluno
+    res.post = post
 
     next()
 }
