@@ -1,24 +1,23 @@
 const mongoose = require('mongoose')
 
-// definição do esquema
-const alunoSchema = new mongoose.Schema({
+const postSchema = new mongoose.Schema({
     id : {
         type: String,
         required: true
     },
-    matricula: {
+    userID: {
+        type: UUID,
+        required: true
+    },
+    conteudo: {
         type: String,
         required: true
     },
-    anoSemestreDeEntrada: {
+    foto: {
         type: String,
         required: true
     },
-    nomeCompleto: {
-        type: String,
-        required: true
-    },
-    Curso: {
+    status: {
         type: String,
         required: true
     },
@@ -26,7 +25,7 @@ const alunoSchema = new mongoose.Schema({
         type: Date,
         required: true,
         default: Date.now
-    }
+    },
     atualizadoEm: {
         type: Date,
         required: true,
@@ -34,5 +33,4 @@ const alunoSchema = new mongoose.Schema({
     }
 })
 
-// configurando o esquema no banco
-module.exports = mongoose.model('Aluno', alunoSchema)
+module.exports = mongoose.model('Post', postSchema)
