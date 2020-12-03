@@ -26,14 +26,7 @@ db.once('open', () => console.log('Connected to Mongo DB'))
 
 app.use(express.json())
 
-const subscribersRouter = require('./routes/subscribers')
-app.use('/v1/subscribers', subscribersRouter)
-
-const cursosRouter = require('./routes/cursos')
-app.use('/v1/cursos', cursosRouter)
-
-const alunosRouter = require('./routes/alunos')
-app.use('/v1/alunos', alunosRouter)
-
+const postsRouter = require('./routes/posts')
+app.use('/v1/posts', postsRouter)
 
 app.listen(3000, () => console.log('Server started.'))
